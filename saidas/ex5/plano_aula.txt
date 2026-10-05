@@ -1,0 +1,36 @@
+{
+  "titulo": "Interruções no ESP32",
+  "publico": "Estudantes de Graduação",
+  "duracao_minutos": 120,
+  "pre_requisitos": [
+    "Fundamentos de Cálculo e Programação Básica",
+    "Conhecimento em Microcontroladores e Sistemas Embarcados",
+    "Conhecimento Básico de Hardware",
+    "Conhecimento de Programação de Microcontroladores"
+  ],
+  "objetivos": [
+    "Compreender a importância e funcionamento das interrupções em microcontroladores ESP32.",
+    "Configurar e implementar interrupções internas e externas no ESP32.",
+    "Optimizar o desempenho do sistema utilizando interrupções."
+  ],
+  "conceitos": [
+    "Interrupções Internas e Externas",
+    "Funções Manipulador de Interrupção",
+    "Configuração de Pinos Interrumpíveis"
+  ],
+  "exemplo_pratico": "Configurar um pino interruptor de borda no ESP32 e implementar a função de manipulador de interrupção.",
+  "exercicios": [
+    {
+      "enunciado": "Implemente um código que utilize uma interrupção de borda elevante no ESP32.",
+      "resposta_esperada": "Incluir a definição de um pino como entrada com resistência pull-up e a configuração de uma interrupção de borda elevante no pino. Implementar uma função de manipulador de interrupção que será executada quando a borda elevante ocorrer."
+    },
+    {
+      "enunciado": "Crie um código que ligue e desligue um LED sempre que uma interrupção de borda de queda ocorrer no pino interruptor.",
+      "resposta_esperada": "Configurar um pino para a entrada com resistência pull-up, adicionar uma interrupção de borda de queda no pino selecionado, e dentro da função de manipulador de interrupção, inverter o estado do pino ligado ao LED."
+    },
+    {
+      "enunciado": "Explique a diferença entreHard e Soft Interruptions em dispositivos ESP32.",
+      "resposta_esperada": "Soft Interruptions são criadas pelo próprio código do programador para realizar certas tarefas, enquanto Hard Interruptions são interrupções que ocorrem como resultado de sinais externos ou temporizações no ESP32. Soft Interruptions podem ser gerenciados de maneira eficiente sem precisar deslocar o processador do seu fluxo normal de execução, enquanto Hard Interruptions requerem um gerenciamento mais complexo com o potencial para prejudicar o desempenho do sistema."
+    }
+  ]
+}

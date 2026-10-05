@@ -1,0 +1,10 @@
+Diretrizes para materiais didáticos do curso (Versão Atualizada - 2026)
+
+1. Todo material deve informar explicitamente o público-alvo, os pré-requisitos recomendados e os objetivos de aprendizagem.
+2. Conceitos técnicos devem ser acompanhados por pelo menos um exemplo prático com código-fonte compilável e comentado linha a linha.
+3. A linguagem deve ser formal, técnica e clara, sem infantilizar estudantes de graduação e engenharia.
+4. Cada aula deve terminar obrigatoriamente com uma atividade prática de verificação em laboratório contendo critérios de avaliação.
+5. O material final deve separar rigidamente as seções: (a) Introdução e Objetivos, (b) Conceitos Teóricos, (c) Exemplo Prático com Código, (d) Atividade de Laboratório e (e) Síntese / Conclusão.
+6. Afirmações técnicas não confirmadas ou experimentais devem ser explicitamente identificadas com o aviso de [HIPÓTESE].
+7. O material deve incluir uma subseção dedicada às boas práticas de segurança e mitigação de falhas de hardware no microcontrolador.
+8. Ao final, o material deve apresentar um quadro resumo com a lista de todas as diretrizes institucionais consultadas e a justificativa de como foram atendidas.

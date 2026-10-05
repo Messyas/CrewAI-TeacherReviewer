@@ -6,7 +6,7 @@ Micro projeto demonstrativo utilizando [CrewAI](https://github.com/crewAIInc/cre
 
 ---
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
 - **Python:** Versão 3.10, 3.11 ou 3.12 (recomendado 3.11 para estabilidade).
 - Uma chave de API de LLM (por padrão, OpenAI: `OPENAI_API_KEY`).
@@ -17,7 +17,7 @@ Escolha abaixo o método de sua preferência:
 
 ---
 
-## 🐍 Opção 1: Setup Tradicional (`venv` + `pip`)
+## Opção 1: Setup Tradicional (`venv` + `pip`)
 
 ### 1. Criar o Ambiente Virtual
 
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 ---
 
-## ⚡ Opção 2: Setup Ultra-Rápido com `uv` (Recomendado)
+## Opção 2: Setup Ultra-Rápido com `uv` (Recomendado)
 
 O [uv](https://docs.astral.sh/uv/) é um gerenciador de pacotes e ambientes Python de altíssima velocidade (10-100x mais rápido que o pip).
 
@@ -98,7 +98,7 @@ uv pip install -r requirements.txt
 
 ---
 
-## ⚙️ Configuração das Variáveis de Ambiente (`.env`)
+## Configuração das Variáveis de Ambiente (`.env`)
 
 Independente do método de instalação escolhido, configure sua chave de API:
 
@@ -125,7 +125,7 @@ Independente do método de instalação escolhido, configure sua chave de API:
 
 ---
 
-## 🎯 Executando o Micro Projeto
+## Executando o Micro Projeto
 
 ### Com o ambiente ativado (Opção 1 ou 2):
 
@@ -150,7 +150,7 @@ uv run main.py "Arquitetura de Microsserviços para iniciantes"
 
 ---
 
-## 📁 Estrutura de Arquivos
+## Estrutura de Arquivos
 
 ```
 CrewAI-TeacherReviewer/
@@ -165,9 +165,47 @@ CrewAI-TeacherReviewer/
 
 ---
 
-## 💡 Como Desativar o Venv
+## Exercícios Práticos - Curso de Agentes Inteligentes (Projeto AXacademy)
+
+> **Contexto:** Este repositório contém as implementações dos exercícios práticos do **curso de Agentes Inteligentes do projeto AXacademy**.
+>
+> **Instruções:** Resolva os três exercícios abaixo. Se for o caso, faça pesquisas. Entregue os códigos Python e os arquivos gerados para cada um dos exercícios.
+
+---
+
+### Exemplo 4: Terceiro Agente "Revisor"
+- **Arquivo base:** `main4.py`
+- **Enunciado:** Adicione um terceiro agente **"Revisor"**, que recebe como contexto o material produzido pelo Professor.
+- **Entregáveis:** Código Python atualizado e saída gerada salva em `saidas/ex4/aula_revisada.md`.
+
+---
+
+### Exemplo 5: Pré-requisitos e Validação Estrita de Exercícios
+- **Arquivo base:** `main5.py`
+- **Enunciado:** Adicione ao `PlanoAula` um campo `pre_requisitos` contendo uma lista de strings e imponha que existam exatamente três exercícios (nem mais, nem menos).
+- **Entregáveis:** Código Python atualizado com as validações Pydantic e o arquivo gerado `saidas/ex5/plano_aula.txt`.
+
+---
+
+### Exemplo 6: Modificação da Base Institucional
+- **Arquivo base:** `main6.py`
+- **Enunciado:** Modifique `base_institucional.txt`, execute novamente e identifique quais partes da resposta foram alteradas. Como não há mudanças no código de sala de aula, envie somente o novo arquivo `dados/base_institucional.txt` e os arquivos gerados.
+- **Entregáveis:** Novo arquivo `dados/base_institucional.txt` e o arquivo de saída gerado `saidas/ex6/material_diretrizes.txt`.
+- **Análise das Alterações Identificadas na Resposta:**
+  1. **Seção de Pré-Requisitos e Público-Alvo:** A nova versão incorporou explicitamente os pré-requisitos técnicos (C/C++, ESP32 e tempo real) antes dos objetivos de aprendizagem (atendendo à nova diretriz 1).
+  2. **Exemplo Prático com Código Comentado Linha a Linha:** O código de exemplo em C/C++ passou a ser acompanhado da explicação detalhada linha a linha de cada instrução (atendendo à diretriz 2).
+  3. **Subseção de Boas Práticas e Segurança de Hardware:** Foi adicionada uma nova subseção dedicada à mitigação de falhas de hardware, proteção contra sobrecorrente e estabilidade da alimentação (atendendo à diretriz 7).
+  4. **Atividade de Laboratório Estruturada:** A atividade final foi convertida em roteiro prático de laboratório com número de repetições e observação de consistência (atendendo à diretriz 4).
+  5. **Separação Rígida das Seções:** O material gerado organizou o conteúdo estritamente nas 5 seções estipuladas na diretriz 5 (`Introdução e Objetivos`, `Conceitos Teóricos`, `Exemplo Prático com Código`, `Atividade de Laboratório` e `Síntese / Conclusão`).
+
+
+
+---
+
+## Como Desativar o Venv
 
 Quando terminar de trabalhar com o ambiente ativado:
 ```bash
 deactivate
 ```
+

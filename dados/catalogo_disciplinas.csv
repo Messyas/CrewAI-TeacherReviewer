@@ -1,0 +1,6 @@
+codigo,nome,nivel,pre_requisitos,observacoes
+ICC101,Introdução à Computação,Inicial,Nenhum,Evitar excesso de jargão
+LFA201,Linguagens Formais e Autômatos,Intermediário,Matemática Discreta,Usar exemplos com autômatos
+COMP301,Compiladores,Avançado,LFA201,Relacionar teoria e implementação
+SE202,Sistemas Embarcados,Intermediário,Programação C,Priorizar exemplos de hardware
+IA210,Inteligência Artificial,Intermediário,Programação Python,Discutir avaliação e limitações

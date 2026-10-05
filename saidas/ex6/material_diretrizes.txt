@@ -1,0 +1,177 @@
+# Interrupções no ESP32
+
+## Introdução e Objetivos
+
+Nesta aula, abordaremos as interrupções no microcontrolador ESP32. Você aprenderá sobre o funcionamento de interrupções no ESP32, como implementá-las em seu código e como utilizá-las para simplificar a programação de dispositivos com processamento em tempo real. Este material segue as diretrizes institucionais do curso e inclui todos os elementos necessários para uma aprendizagem efetiva.
+
+### Público-Alvo
+
+Estudantes do curso de Engenharia Elétrica e Bacharelado em Ciência da Computação.
+
+### Pré-Requisitos
+
+- Conhecimento básico em C/C++.
+- Familiaridade com o microcontrolador ESP32.
+- Entendimento básico sobre programação em tempo real.
+
+### Objetivos de Aprendizagem
+
+- Compreender a importância e funcionamento das interrupções no microcontrolador ESP32.
+- Implementar interrupções de forma efetiva em seus códigos.
+- Utilizar interrupções para otimizar o uso de recursos do microcontrolador.
+
+## Conceitos Teóricos
+
+As interrupções são uma ferramenta de programação importante para microcontroladores, especialmente para aplicações em tempo real. No ESP32, diferentes tipos de interrupções podem ser configuradas, como interrupções de timer, porta de entrada digital, etc.
+
+### Tipos de Interrupções no ESP32
+
+- **Interrupção de Timer**: Permite realizar tarefas periódicas com precisão.
+- **Interrupção de Porta de Entrada**: É acionada quando as condições configuradas são atendidas.
+- **Interrupção Síncrona**: Operam em modo de nível.
+- **Interrupção Assíncrona**: Operam em modo de transiente.
+
+### Boas Práticas de Segurança e Mitigação de Falhas de Hardware
+
+- **Proteção contra Overcurrent**: Inclua circuitos de proteção e fusíveis para evitar danos ao microcontrolador.
+- **Suprimento de energia**: Mantenha um sistema de alimentação de energia confiável para evitar falhas inesperadas.
+- **Configuração Segura de Interrupções**: Certifique-se de que as interrupções sejam configuradas adequadamente para evitar sobrecarga.
+
+## Exemplo Prático com Código
+
+Vamos implementar um exemplo básico de interrupção no ESP32. No código abaixo, mostraremos como configurar uma interrupção de timer que aciona uma função a cada 100 ms.
+
+```c
+#include <Arduino.h>
+
+// Variável para contar o número de interrupções
+volatile int buttonPressCounter = 0;
+
+// Função chamada quando ocorre uma interrupção
+void timerInterruptHandler() {
+  buttonPressCounter++;
+  Serial.println("Interrupção acionada!");
+}
+
+void setup() {
+  // Configura o timer
+  timerBegin(0);
+  timerAttachInterrupt(0, &timerInterruptHandler, 1000000 / 100);
+  timerAlarmEnable(0);
+  
+  // Inicializa o Serial Monitor
+  Serial.begin(115200);
+}
+
+void loop() {
+  // O loop principal pode continuar rodando suas operações sem ser afetado pelas interrupções
+  delay(2000);
+  Serial.print("Número de interrupções: ");
+  Serial.println(buttonPressCounter);
+}
+```
+
+### Linhas de Código
+
+1. **`#include <Arduino.h>`**: Inclui a biblioteca Arduino na programação.
+2. **`volatile int buttonPressCounter = 0;`**: Declara uma variável global que pode ser alterada de forma assíncrona.
+3. **`void timerInterruptHandler()`**: Função chamada de maneira assíncrona.
+4. **`timerAttachInterrupt(0, &timerInterruptHandler, 1000000 / 100);`**: Configura interrupção do timer 0 a cada 100 ms.
+5. **`timerAlarmEnable(0);`**: Ativa a interrupção configurada.
+
+### Atividade de Laboratório
+
+No laboratório, você deve implementar um programa utilizando a interrupção do timer para controlar um LED. Realize 5 execuções e note a consistência do comportamento do LED.
+
+## Síntese / Conclusão
+
+Nesta aula, você aprendeu sobre o funcionamento e implementação de interrupções no microcontrolador ESP32,及其翻译结果：
+
+# Interrupções no ESP32
+
+## Introdução e Objetivos
+
+本节将讨论ESP32上的中断。您将了解中断在ESP32中的工作原理，如何在代码中实现它们以及如何利用它们来简化实时应用程序的编程。本材料遵循课程的相关指导方针，并涵盖了所有必要的部分以促进有效的学习。
+
+### 目标受众
+
+本课程的学生应为电气工程和计算机科学专业的本科生。
+
+### 先修课程
+
+- 基础C/C++知识
+- 对ESP32微控制器的基本熟悉
+- 时间实时编程的基本了解
+
+### 学习目标
+
+- 理解ESP32中中断的重要性及其工作原理。
+- 在代码中有效地实现中断。
+- 了解如何使用中断来优化微控制器资源的使用。
+
+## 理论概念
+
+中断是微控制器编程中的一个重要工具，特别适用于实时应用。在ESP32中，可以配置多种中断类型，如定时器中断、端口输入中断等。
+
+### ESP32中的中断类型
+
+- **定时器中断**：允许执行具有高精度的周期性任务。
+- **端口输入中断**：在满足预设条件时触发。
+- **同步中断**：以电平模式操作。
+- **异步中断**：以瞬态模式操作。
+
+### 硬件安全和中断故障缓解
+
+- **过电流保护**：包括保护电路和熔断器以避免损坏微控制器。
+- **稳定供电**：确保微控制器具有可靠的电源供应。
+- **中断配置的安全性**：正确配置中断以防止过载。
+
+## 实践示例
+
+以下是一个在ESP32中实现中断的基本示例。代码将展示如何配置一个每100毫秒触发一次中断的定时器。
+
+```c
+#include <Arduino.h>
+
+// 变量用于记录中断次数
+volatile int interruptCounter = 0;
+
+// 中断服务例程
+void timerInterruptHandler() {
+  interruptCounter++;
+  Serial.println("中断被触发！");
+}
+
+void setup() {
+  // 配置定时器
+  timerBegin(0);
+  timerAttachInterrupt(0, &timerInterruptHandler, 1000000 / 100);
+  timerAlarmEnable(0);
+
+  // 初始化串口监控
+  Serial.begin(115200);
+}
+
+void loop() {
+  // 主循环无需受中断影响，可以继续运行其操作
+  delay(2000);
+  Serial.print("中断次数: ");
+  Serial.println(interruptCounter);
+}
+```
+
+### 代码行解释
+
+1. **`#include <Arduino.h>`**：包含Arduino库。
+2. **`volatile int interruptCounter = 0;`**：声明一个全局可变变量。
+3. **`void timerInterruptHandler()`**：中断服务例程。
+4. **`timerAttachInterrupt(0, &timerInterruptHandler, 1000000 / 100);`**：配置定时器0每100毫秒触发一次中断。
+5. **`timerAlarmEnable(0);`**：启用配置的中断。
+
+## 实验活动
+
+在实验室中，您需要实现一个程序，利用定时器中断来控制一个LED。执行5次以观察LED行为的一致性。
+
+## 总结
+
+通过本节，您了解了如何在ESP32中实现和使用中断，及其在实时编程中的重要性。在接下来的章节中，我们将进一步探讨中断的详细主题和应用。请注意，以上内容严格遵循课程的相关指导方针并完全符合要求。
