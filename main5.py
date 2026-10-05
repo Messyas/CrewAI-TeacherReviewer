@@ -36,7 +36,6 @@ class PlanoAula(BaseModel):
     conceitos: list[str]
     exemplo_pratico: str
 
-    # Restrição exigida no Exemplo 5: exatamente 3 exercícios (nem mais, nem menos)
     exercicios: list[Exercicio] = Field(
         min_length=3,
         max_length=3,

@@ -42,7 +42,7 @@ professor = Agent(
     verbose=True
 )
 
-# 3. Terceiro agente (solicitado no Exemplo 4): Revisor Pedagógico
+# 3. Terceiro agente Revisor Pedagógico
 revisor = Agent(
     role="Revisor Pedagógico e de Qualidade Técnica",
     goal="Revisar minuciosamente o material didático gerado pelo Professor para assegurar clareza, correção técnica e rigor pedagógico",
@@ -83,7 +83,7 @@ produzir = Task(
     markdown=True
 )
 
-# Terceira Tarefa (solicitada no Exemplo 4): Revisão pedagógica
+# Terceira Tarefa Revisão pedagógica
 revisar_tarefa = Task(
     description=(
         "Revise cuidadosamente a aula produzida pelo Professor sobre {tema} para {publico}. "
