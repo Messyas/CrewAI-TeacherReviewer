@@ -1,0 +1,25 @@
+# Ambientes Virtuais
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Configurações e Variáveis de Ambiente
+.env
+.env.local
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# CrewAI outputs e logs
+db/
+*.log
