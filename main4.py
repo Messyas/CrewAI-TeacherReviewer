@@ -81,7 +81,7 @@ produzir = Task(
     agent=professor,
     context=[pesquisar],
     markdown=True,
-    output_file=os.path.join("saidas", "ex4", "aula_professor.md")
+    output_file=os.path.join("saidas", "ex4", "material_professor.md")
 )
 
 # Terceira Tarefa: Revisão pedagógica (recebe como contexto o material do Professor e gera o parecer/versão revisada)
@@ -118,7 +118,8 @@ dados = {
 
 if __name__ == "__main__":
     # Garante a existência do diretório de saída
-    os.makedirs(os.path.join("saidas", "ex4"), exist_ok=True)
+    pasta_ex4 = os.path.join("saidas", "ex4")
+    os.makedirs(pasta_ex4, exist_ok=True)
 
     # Executar a crew
     resultado = crew.kickoff(inputs=dados)
@@ -129,11 +130,19 @@ if __name__ == "__main__":
     print("=" * 60 + "\n")
     print(resultado.raw)
 
-    # Salva também como aula_revisada.md para compatibilidade retroativa
-    caminho_revisada = os.path.join("saidas", "ex4", "aula_revisada.md")
-    with open(caminho_revisada, "w", encoding="utf-8") as arquivo:
+    # Salva também a versão em .txt do parecer do revisor
+    caminho_revisor_txt = os.path.join(pasta_ex4, "parecer_revisor.txt")
+    with open(caminho_revisor_txt, "w", encoding="utf-8") as arquivo:
         arquivo.write(resultado.raw)
 
+    # Salva também a versão em .txt da produção do professor se o .md existir
+    caminho_prof_md = os.path.join(pasta_ex4, "material_professor.md")
+    if os.path.exists(caminho_prof_md):
+        with open(caminho_prof_md, "r", encoding="utf-8") as f_in:
+            conteudo_prof = f_in.read()
+        with open(os.path.join(pasta_ex4, "producao_professor.txt"), "w", encoding="utf-8") as f_out:
+            f_out.write(conteudo_prof)
+
     print("\nArquivos salvos com sucesso:")
-    print(f"- Material do Professor: {os.path.join('saidas', 'ex4', 'aula_professor.md')}")
-    print(f"- Parecer do Revisor: {os.path.join('saidas', 'ex4', 'parecer_revisor.md')}")
+    print(f"- Material do Professor: {caminho_prof_md}")
+    print(f"- Parecer do Revisor: {os.path.join(pasta_ex4, 'parecer_revisor.md')}")

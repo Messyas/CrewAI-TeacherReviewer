@@ -177,8 +177,8 @@ CrewAI-TeacherReviewer/
 - **Arquivo base:** `main4.py`
 - **Enunciado:** Adicione um terceiro agente **"Revisor"**, que recebe como contexto o material produzido pelo Professor (armazenado em arquivo) e gera um outro arquivo com o parecer.
 - **Entregáveis:** Código Python atualizado e saídas geradas:
-  - `saidas/ex4/aula_professor.md`: Material didático gerado pelo agente Professor.
-  - `saidas/ex4/parecer_revisor.md` (e `aula_revisada.md`): Parecer e material revisado gerado pelo agente Revisor.
+  - `saidas/ex4/material_professor.md` (e `producao_professor.txt`): Material didático gerado pelo agente Professor.
+  - `saidas/ex4/parecer_revisor.md` (e `parecer_revisor.txt`): Parecer pedagógico e material revisado gerado pelo agente Revisor.
 
 ---
 
