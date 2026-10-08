@@ -1,0 +1,9 @@
+# Introdução às Interrupções no ESP32
+
+Antes de abordar o tema das **interrupções** no **ESP32**, é importante considerar a **nível de complexidade** e os **pró-requisitos** necessários para lidar com esse conceito em **Sistemas Embarcados**. O nível intermediário exigirá que você tenha dominado os fundamentos da programação em **C**, pois as manipulações de hardware típicas no `ESP32` são geralmente feitas utilizando essa linguagem.
+
+Os exemplos de hardware são uma das **observações chave** encontradas na descrição do curso. Portanto, na **introdução** à tópico, faremos um *vínculo* entre a teoria e a prática utilizando exemplos de `ESP32` diretamente no seu circuito de desenvolvimento.
+
+Nessa aula, vocês verão como **atrarres**, **gestionar** e **responder** a diferentes tipos de interrupções podem ser efetuadas para controlar a aplicação de software no `ESP32`. Iremos abordar conceitos como a *prioridade* e a *manipulação de estados* de interrupção em detalhes, mantendo sempre a prática do `ESP32` como **exemplo**.
+
+Estas are as linhas gerais da introdução à aula, adequada ao `nível intermédio e aos pré-requisitos` da disciplina `Sistemas Embarcados` e **priorizando** exemplos de hardware.

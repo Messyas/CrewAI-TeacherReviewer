@@ -200,7 +200,36 @@ CrewAI-TeacherReviewer/
   4. **Atividade de Laboratório Estruturada:** A atividade final foi convertida em roteiro prático de laboratório com número de repetições e observação de consistência (atendendo à diretriz 4).
   5. **Separação Rígida das Seções:** O material gerado organizou o conteúdo estritamente nas 5 seções estipuladas na diretriz 5 (`Introdução e Objetivos`, `Conceitos Teóricos`, `Exemplo Prático com Código`, `Atividade de Laboratório` e `Síntese / Conclusão`).
 
+---
 
+### Exemplo 7: Ferramenta Personalizada de Catálogo CSV
+- **Arquivo base:** `main7.py`
+- **Enunciado:** Consulta a catálogo de disciplinas em CSV (`SE202`) e gera o material adaptado.
+- **Entregáveis:** Código Python `main7.py` e arquivos gerados salvos em `material_personalizado.txt` e `saidas/ex7/material_personalizado.txt`.
+
+---
+
+### Exemplo 8: Knowledge + Memory com Duas Execuções Sucessivas
+- **Arquivo base:** `main8.py`
+- **Enunciado:** Demonstrar o uso de `Memory` através de duas execuções sucessivas mantendo persistência (`storage=".crewai/memory_curso"`):
+  1. **Execução 1:** Solicita o tema *"Agentes inteligentes com n8n"* com a preferência pedagógica explícita: *"Para esta disciplina, priorize exemplos práticos com ESP32, explicações curtas e uma atividade ao final"*.
+  2. **Execução 2:** Executa com o tema *"Agentes inteligentes com CrewAI"* e a instrução: *"Produza o novo material mantendo, quando relevante, as preferências pedagógicas adotadas anteriormente"*.
+- **Como executar:**
+  - `uv run python main8.py 1` (roda apenas a execução 1)
+  - `uv run python main8.py 2` (roda apenas a execução 2 consultando a memória persistida)
+  - `uv run python main8.py todas` (executa ambas em sequência)
+- **Entregáveis:** Código Python `main8.py` e saídas geradas em `saidas/ex8/parecer_execucao1_n8n.txt` e `saidas/ex8/parecer_execucao2_crewai.txt`.
+
+---
+
+### Exemplo 9: Guardrail, Revisão e Aprovação Humana Iterativa
+- **Arquivo base:** `main9.py`
+- **Enunciado:** Ciclo iterativo contínuo de aprovação humana. Caso o usuário rejeite a versão, ele fornece o feedback corretivo e a Crew gera uma nova iteração salvando separadamente cada versão (`v1`, `v2`, etc.).
+- **Como executar:**
+  ```bash
+  uv run python main9.py
+  ```
+- **Entregáveis:** Código Python `main9.py` e arquivos versionados gerados em `saidas/ex9/` (`material_professor_v1.md`, `parecer_revisor_v1.md`, `material_professor_v2.md`, etc.).
 
 ---
 

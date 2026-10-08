@@ -1,17 +1,25 @@
 # ============================================================
-# CrewAI - Guardrail + revisão + aprovação humana
+# Exemplo 9: CrewAI - Guardrail + Revisão + Aprovação Humana Iterativa
+# Permite refações contínuas com salvamento de v1, v2, v3, etc.
 # ============================================================
 
+import os
+from dotenv import load_dotenv
 from crewai import Agent, Crew, LLM, Process, Task, TaskOutput
 
-# 1. Criar a LLM local
+load_dotenv()
+
+# 1. Configurar a LLM local (Ollama)
+MODEL_NAME = os.getenv("LOCAL_MODEL", "ollama/qwen2.5:7b-instruct-q4_K_M")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
 llm = LLM(
-    model="ollama/qwen3:4b",
-    base_url="http://localhost:11434"
+    model=MODEL_NAME,
+    base_url=OLLAMA_BASE_URL
 )
 
 # 2. Definir o guardrail
-# Seções obrigatórias do material.
+# Seções obrigatórias do material
 SECOES = [
     "objetivos",
     "conceitos",
@@ -22,13 +30,11 @@ SECOES = [
 
 def validar_material(resultado: TaskOutput) -> tuple[bool, str]:
     """
-    Verifica se o material produzido pelo professor
-    atende aos critérios mínimos.
+    Verifica se o material produzido pelo professor atende aos critérios mínimos.
     """
-
     texto = resultado.raw.strip()
 
-    # Verifica as seções obrigatórias.
+    # Verifica as seções obrigatórias
     ausentes = []
     for secao in SECOES:
         if secao not in texto.casefold():
@@ -37,37 +43,29 @@ def validar_material(resultado: TaskOutput) -> tuple[bool, str]:
     if ausentes:
         return (
             False,
-            "Inclua as seções obrigatórias: "
-            + ", ".join(ausentes)
+            "Inclua as seções obrigatórias: " + ", ".join(ausentes)
         )
 
-    # Verifica o tamanho mínimo.
+    # Verifica o tamanho mínimo
     if len(texto.split()) < 350:
         return (
             False,
             "O material deve ter pelo menos 350 palavras."
         )
 
-    # Resultado aprovado pelo guardrail.
+    # Resultado aprovado pelo guardrail
     return True, texto
 
-# 3. Função que constrói a Crew
+# 3. Função que constrói a Crew para cada iteração
 def construir_crew(feedback: str = "nenhum", arquivo_material: str = "material_professor.md") -> Crew:
-
     # Agente responsável pela produção do material
     professor = Agent(
         role="Professor conteudista",
-
-        goal=(
-            "Produzir material didático completo "
-            "e corrigir falhas indicadas"
-        ),
-
+        goal="Produzir material didático completo e corrigir falhas indicadas pelo feedback humano",
         backstory=(
-            "Professor de graduação orientado "
-            "por critérios verificáveis."
+            "Professor de graduação orientado por critérios verificáveis "
+            "e altamente responsivo a feedbacks de melhoria pedagógica."
         ),
-
         llm=llm,
         verbose=True
     )
@@ -75,17 +73,10 @@ def construir_crew(feedback: str = "nenhum", arquivo_material: str = "material_p
     # Agente responsável pela revisão
     revisor = Agent(
         role="Revisor pedagógico",
-
-        goal=(
-            "Identificar problemas concretos "
-            "no material produzido"
-        ),
-
+        goal="Identificar problemas concretos no material produzido e validar os ajustes",
         backstory=(
-            "Revisor criterioso que apresenta "
-            "correções específicas."
+            "Revisor criterioso que apresenta correções específicas e detalha pontos aprimorados."
         ),
-
         llm=llm,
         verbose=True
     )
@@ -94,50 +85,33 @@ def construir_crew(feedback: str = "nenhum", arquivo_material: str = "material_p
     producao = Task(
         description=(
             "Produza material sobre {tema} para {publico}. "
-            "Use obrigatoriamente as seções Objetivos, "
-            "Conceitos, Exemplo, Atividade e Síntese. "
+            "Use obrigatoriamente as seções Objetivos, Conceitos, Exemplo, Atividade e Síntese. "
             f"Feedback recebido anteriormente: {feedback}."
         ),
-
         expected_output=(
-            "Material didático em Markdown com todas "
-            "as seções solicitadas e pelo menos 350 palavras."
+            "Material didático em Markdown com todas as seções solicitadas e pelo menos 350 palavras."
         ),
-
         agent=professor,
-
-        # Validação automática.
         guardrail=validar_material,
-
-        # Até duas novas tentativas caso o guardrail falhe.
         guardrail_max_retries=2,
-
-        # Salva somente a produção do professor.
         output_file=arquivo_material
     )
 
     # Tarefa 2: revisão do material
     revisao = Task(
         description=(
-            "Revise cuidadosamente o material produzido "
-            "pelo professor. Avalie clareza, correção técnica, "
-            "sequência didática e adequação ao público. "
-            "Indique problemas encontrados e apresente "
-            "recomendações específicas."
+            "Revise cuidadosamente o material produzido pelo professor. "
+            "Avalie clareza, correção técnica, sequência didática e adequação ao público. "
+            f"Considere se o feedback humano anterior ('{feedback}') foi devidamente atendido. "
+            "Indique problemas encontrados e apresente recomendações específicas."
         ),
-
         expected_output=(
-            "Parecer em Markdown contendo avaliação "
-            "do material e recomendações de melhoria."
+            "Parecer em Markdown contendo avaliação do material e recomendações de melhoria."
         ),
-
         agent=revisor,
-
-        # O revisor recebe a produção do professor.
         context=[producao]
     )
 
-    # Criar a Crew
     return Crew(
         agents=[professor, revisor],
         tasks=[producao, revisao],
@@ -145,145 +119,78 @@ def construir_crew(feedback: str = "nenhum", arquivo_material: str = "material_p
         verbose=True
     )
 
-
-# 4. Função auxiliar para mostrar um arquivo
+# 4. Função auxiliar para leitura de arquivo
 def ler_arquivo(nome_arquivo: str) -> str:
-    """
-    Lê e retorna o conteúdo de um arquivo textual.
-    """
-
     with open(nome_arquivo, "r", encoding="utf-8") as arquivo:
         return arquivo.read()
 
+# 5. Execução principal com ciclo iterativo de aprovação humana
+if __name__ == "__main__":
+    pasta_ex9 = os.path.join("saidas", "ex9")
+    os.makedirs(pasta_ex9, exist_ok=True)
 
-# 5. Dados de entrada
-entradas = {
-    "tema": "Interrupções no ESP32",
-    "publico": "estudantes de graduação"
-}
+    entradas = {
+        "tema": "Interrupções no ESP32",
+        "publico": "estudantes de graduação"
+    }
 
-# 6. PRIMEIRA EXECUÇÃO
-arquivo_material = "material_professor.md"
-arquivo_parecer = "parecer_revisor.md"
+    versao = 1
+    feedback_acumulado = "nenhum (versão inicial)"
+    aprovado = False
 
-crew = construir_crew(arquivo_material=arquivo_material)
+    while not aprovado:
+        print("\n" + "=" * 70)
+        print(f" EXECUÇÃO ITERATIVA - VERSÃO {versao} (v{versao}) ")
+        print("=" * 70)
 
-resultado = crew.kickoff(inputs=entradas)
+        # Definir nomes dos arquivos versionados
+        arquivo_material = os.path.join(pasta_ex9, f"material_professor_v{versao}.md")
+        arquivo_parecer = os.path.join(pasta_ex9, f"parecer_revisor_v{versao}.md")
 
+        # Cria e executa a Crew da iteração
+        crew = construir_crew(
+            feedback=feedback_acumulado,
+            arquivo_material=arquivo_material
+        )
+        resultado = crew.kickoff(inputs=entradas)
 
-# 7. Separar as duas saídas
+        # Grava o parecer da versão atual
+        parecer = resultado.raw
+        with open(arquivo_parecer, "w", encoding="utf-8") as f:
+            f.write(parecer)
 
-# Material produzido pelo professor.
-#
-# Foi salvo automaticamente pela Task usando output_file.
+        # Salva cópias também na raiz ou arquivos gerais para compatibilidade
+        with open("material_professor.md", "w", encoding="utf-8") as f:
+            f.write(ler_arquivo(arquivo_material))
+        with open("parecer_revisor.md", "w", encoding="utf-8") as f:
+            f.write(parecer)
 
-material = ler_arquivo(arquivo_material)
+        # Exibe as saídas no terminal para o usuário avaliar
+        print("\n" + "=" * 70)
+        print(f" MATERIAL PRODUZIDO PELO PROFESSOR (v{versao}) ")
+        print("=" * 70)
+        print(ler_arquivo(arquivo_material))
 
+        print("\n" + "=" * 70)
+        print(f" PARECER DO REVISOR (v{versao}) ")
+        print("=" * 70)
+        print(parecer)
 
-# Parecer do revisor.
-#
-# Como a revisão é a última Task da Crew,
-# resultado.raw corresponde à saída do revisor.
+        print("\nArquivos gerados nesta rodada:")
+        print(f"- {arquivo_material}")
+        print(f"- {arquivo_parecer}")
 
-parecer = resultado.raw
+        # Solicita aprovação humana iterativa
+        decisao = input(
+            f"\n[Aprovação Humana] Após analisar o MATERIAL e o PARECER da v{versao}, aprovar o material? [s/n]: "
+        ).strip().casefold()
 
-
-# Salvar o parecer separadamente.
-with open(arquivo_parecer, "w", encoding="utf-8") as arquivo:
-    arquivo.write(parecer)
-
-
-# 8. Mostrar AO HUMANO as duas saídas
-
-print("\n")
-print("=" * 70)
-print("MATERIAL PRODUZIDO PELO PROFESSOR")
-print("=" * 70)
-print(material)
-
-
-print("\n")
-print("=" * 70)
-print("PARECER DO REVISOR")
-print("=" * 70)
-print(parecer)
-
-
-print("\nArquivos gerados:")
-print(f"- {arquivo_material}")
-print(f"- {arquivo_parecer}")
-
-
-# 9. APROVAÇÃO HUMANA
-
-decisao = input(
-    "\nApós analisar o MATERIAL e o PARECER, "
-    "aprovar o material? [s/n]: "
-).strip().casefold()
-
-# 10. Material aprovado
-
-if decisao == "s":
-    print("\nMaterial aprovado pelo responsável humano.")
-# 11. Material rejeitado
-else:
-    # Humano fornece o feedback.
-    feedback = input("\nInforme as correções necessárias: ").strip()
-
-    # Arquivos da nova versão.
-    arquivo_material_revisado = (
-        "material_professor_revisado.md"
-    )
-
-    arquivo_parecer_revisado = (
-        "parecer_revisor_revisado.md"
-    )
-
-
-    # Construir novamente a Crew, agora com feedback.
-
-    crew_revisada = construir_crew(
-        feedback=feedback,
-        arquivo_material=arquivo_material_revisado
-    )
-
-
-    # Nova execução.
-
-    resultado_revisado = crew_revisada.kickoff(
-        inputs=entradas
-    )
-
-    # 12. Separar novamente as duas saídas
-    # Nova produção do professor.
-    material_revisado = ler_arquivo(
-        arquivo_material_revisado
-    )
-
-    # Novo parecer do revisor.
-    parecer_revisado = resultado_revisado.raw
-
-
-    # Salvar novo parecer.
-    with open(arquivo_parecer_revisado, "w", encoding="utf-8") as arquivo:
-        arquivo.write(parecer_revisado)
-
-    # 13. Mostrar a nova versão ao humano
-
-    print("\n")
-    print("=" * 70)
-    print("NOVA VERSÃO DO MATERIAL")
-    print("=" * 70)
-    print(material_revisado)
-
-
-    print("\n")
-    print("=" * 70)
-    print("NOVO PARECER DO REVISOR")
-    print("=" * 70)
-    print(parecer_revisado)
-
-
-    print("\nArquivos da nova execução:")
-    print(f"- {arquivo_material_revisado}")
-    print(f"- {arquivo_parecer_revisado}")
+        if decisao == "s":
+            aprovado = True
+            print(f"\n Parabéns! Material v{versao} APROVADO pelo responsável humano com sucesso.")
+            print(f"Ciclo iterativo finalizado. Todas as versões (v1 a v{versao}) estão salvas em '{pasta_ex9}'.")
+        else:
+            feedback_novo = input(f"\n[Rejeitado] Informe o feedback com as correções necessárias para a v{versao + 1}: ").strip()
+            feedback_acumulado = feedback_novo if feedback_novo else "Melhore a clareza e detalhe mais os exemplos."
+            print(f"\nFeedback registrado: '{feedback_acumulado}'. Iniciando ciclo de refação para v{versao + 1}...\n")
+            versao += 1

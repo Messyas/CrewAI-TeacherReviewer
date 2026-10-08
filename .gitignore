@@ -13,6 +13,7 @@ __pycache__/
 # Configurações e Variáveis de Ambiente
 .env
 .env.local
+.env.*.local
 
 # IDEs e Editores
 .vscode/
@@ -20,6 +21,8 @@ __pycache__/
 *.swp
 *.swo
 
-# CrewAI outputs e logs
+# CrewAI internal storage, memory e logs
+.crewai/
+knowledge/
 db/
 *.log

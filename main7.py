@@ -45,10 +45,18 @@ class CatalogoDisciplinasTool(BaseTool):
         return f"Disciplina {codigo} não encontrada."
 
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Criar a llm local
+MODEL_NAME = os.getenv("LOCAL_MODEL", "ollama/qwen2.5:7b-instruct-q4_K_M")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
 llm = LLM(
-    model="ollama/qwen3:4b",
-    base_url="http://localhost:11434"
+    model=MODEL_NAME,
+    base_url=OLLAMA_BASE_URL
 )
 
 # Criar o agente
@@ -101,16 +109,24 @@ crew = Crew(
     verbose=True
 )
 
-# Executar
-resultado = crew.kickoff(
-    inputs={
-        "codigo": "SE202",
-        "tema": "Interrupções no ESP32"
-    }
-)
+if __name__ == "__main__":
+    pasta_ex7 = os.path.join("saidas", "ex7")
+    os.makedirs(pasta_ex7, exist_ok=True)
 
-# Salvar o resultado em arquivo textual
-with open("material_personalizado.txt", "w", encoding="utf-8") as arquivo:
-    arquivo.write(resultado.raw)
+    # Executar
+    resultado = crew.kickoff(
+        inputs={
+            "codigo": "SE202",
+            "tema": "Interrupções no ESP32"
+        }
+    )
 
-print("Resultado salvo em material_personalizado.txt")
+    # Salvar o resultado em arquivo textual
+    with open("material_personalizado.txt", "w", encoding="utf-8") as arquivo:
+        arquivo.write(resultado.raw)
+
+    caminho_saida = os.path.join(pasta_ex7, "material_personalizado.txt")
+    with open(caminho_saida, "w", encoding="utf-8") as arquivo:
+        arquivo.write(resultado.raw)
+
+    print(f"Resultado salvo em material_personalizado.txt e em {caminho_saida}")
