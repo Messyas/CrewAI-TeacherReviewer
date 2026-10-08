@@ -68,7 +68,7 @@ pesquisar = Task(
     agent=pesquisador
 )
 
-# Segunda Tarefa: Produção didática (usa contexto da pesquisa)
+# Segunda Tarefa: Produção didática (usa contexto da pesquisa e salva em arquivo)
 produzir = Task(
     description=(
         "Use a pesquisa anterior para criar uma aula "
@@ -80,24 +80,25 @@ produzir = Task(
     ),
     agent=professor,
     context=[pesquisar],
-    markdown=True
+    markdown=True,
+    output_file=os.path.join("saidas", "ex4", "aula_professor.md")
 )
 
-# Terceira Tarefa Revisão pedagógica
+# Terceira Tarefa: Revisão pedagógica (recebe como contexto o material do Professor e gera o parecer/versão revisada)
 revisar_tarefa = Task(
     description=(
         "Revise cuidadosamente a aula produzida pelo Professor sobre {tema} para {publico}. "
         "Aprimore a linguagem, valide a correção técnica dos conceitos e exemplos, "
         "e certifique-se de que a estrutura didática esteja impecável. "
-        "Entregue a versão final polida e pronta para publicação."
+        "Entregue um parecer pedagógico detalhado com a versão revisada e pronta para publicação."
     ),
     expected_output=(
-        "Versão final refinada e revisada do material didático em Markdown, "
-        "com alta qualidade técnica e pedagógica."
+        "Parecer pedagógico e versão final revisada do material didático em Markdown."
     ),
     agent=revisor,
     context=[produzir],
-    markdown=True
+    markdown=True,
+    output_file=os.path.join("saidas", "ex4", "parecer_revisor.md")
 )
 
 # Criar a Crew com os 3 agentes e as 3 tarefas sequenciais
@@ -116,18 +117,23 @@ dados = {
 }
 
 if __name__ == "__main__":
+    # Garante a existência do diretório de saída
+    os.makedirs(os.path.join("saidas", "ex4"), exist_ok=True)
+
     # Executar a crew
     resultado = crew.kickoff(inputs=dados)
 
-    # Exibe o material final produzido no terminal
+    # Exibe o parecer final produzido no terminal
     print("\n" + "=" * 60)
-    print(" MATERIAL DIDÁTICO FINAL REVISADO ")
+    print(" PARECER / MATERIAL FINAL DO REVISOR ")
     print("=" * 60 + "\n")
     print(resultado.raw)
 
-    # Salva o resultado final na pasta de saída correspondente
-    os.makedirs("saidas/ex4", exist_ok=True)
-    caminho_saida = os.path.join("saidas", "ex4", "aula_revisada.md")
-    with open(caminho_saida, "w", encoding="utf-8") as arquivo:
+    # Salva também como aula_revisada.md para compatibilidade retroativa
+    caminho_revisada = os.path.join("saidas", "ex4", "aula_revisada.md")
+    with open(caminho_revisada, "w", encoding="utf-8") as arquivo:
         arquivo.write(resultado.raw)
-    print(f"\nResultado salvo com sucesso em {caminho_saida}")
+
+    print("\nArquivos salvos com sucesso:")
+    print(f"- Material do Professor: {os.path.join('saidas', 'ex4', 'aula_professor.md')}")
+    print(f"- Parecer do Revisor: {os.path.join('saidas', 'ex4', 'parecer_revisor.md')}")

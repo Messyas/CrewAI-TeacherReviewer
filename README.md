@@ -175,8 +175,10 @@ CrewAI-TeacherReviewer/
 
 ### Exemplo 4: Terceiro Agente "Revisor"
 - **Arquivo base:** `main4.py`
-- **Enunciado:** Adicione um terceiro agente **"Revisor"**, que recebe como contexto o material produzido pelo Professor.
-- **Entregáveis:** Código Python atualizado e saída gerada salva em `saidas/ex4/aula_revisada.md`.
+- **Enunciado:** Adicione um terceiro agente **"Revisor"**, que recebe como contexto o material produzido pelo Professor (armazenado em arquivo) e gera um outro arquivo com o parecer.
+- **Entregáveis:** Código Python atualizado e saídas geradas:
+  - `saidas/ex4/aula_professor.md`: Material didático gerado pelo agente Professor.
+  - `saidas/ex4/parecer_revisor.md` (e `aula_revisada.md`): Parecer e material revisado gerado pelo agente Revisor.
 
 ---
 
